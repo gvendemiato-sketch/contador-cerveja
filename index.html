@@ -42,18 +42,21 @@
     <div class="row">
       <span>Jaime</span>
       <span id="jaime">0</span>
+	<button onclick="removeBeer('jaime')">-0,5</button>
       <button onclick="addBeer('jaime')">+0,5</button>
     </div>
 
     <div class="row">
       <span>Cux</span>
       <span id="cux">0</span>
+	<button onclick="removeBeer('cux')">-0,5</button>
       <button onclick="addBeer('cux')">+0,5</button>
     </div>
 
     <div class="row">
       <span>Célula</span>
       <span id="celula">0</span>
+	<button onclick="removeBeer('celula')">-0,5</button>
       <button onclick="addBeer('celula')">+0,5</button>
     </div>
   </div>
@@ -93,6 +96,18 @@
         [nome]: firebase.firestore.FieldValue.increment(0.5)
       });
     }
+	function removeBeer(nome) {
+  docRef.get().then((doc) => {
+    const valorAtual = doc.data()[nome];
+
+    if (valorAtual >= 0.5) {
+      docRef.update({
+        [nome]: firebase.firestore.FieldValue.increment(-0.5)
+      });
+    }
+  });
+}
+
   </script>
 
 </body>
