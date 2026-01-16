@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>🍺 Contador de Cervejas</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f6f6f6;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .card {
+      max-width: 400px;
+      margin: 20px auto;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 6px 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🍺 Contador de Cervejas – 2026</h1>
+
+  <div class="card">
+    <div class="row">
+      <span>Jaime</span>
+      <span id="jaime">0</span>
+      <button onclick="addBeer('jaime')">+0,5</button>
+    </div>
+
+    <div class="row">
+      <span>Cux</span>
+      <span id="cux">0</span>
+      <button onclick="addBeer('cux')">+0,5</button>
+    </div>
+
+    <div class="row">
+      <span>Célula</span>
+      <span id="celula">0</span>
+      <button onclick="addBeer('celula')">+0,5</button>
+    </div>
+  </div>
+
+  <h2>Total do grupo: <span id="total">0</span> 🍺</h2>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // 🔑 COLE AQUI O firebaseConfig DO SEU PROJETO
+    const firebaseConfig = {
+      apiKey: "AIzaSyBbhjdbYuR9o4dBZtIuE8tr8H4-CEMA2xM",
+  authDomain: "one-thousand-beer.firebaseapp.com",
+  projectId: "one-thousand-beer",
+  storageBucket: "one-thousand-beer.firebasestorage.app",
+  messagingSenderId: "401765170444",
+  appId: "1:401765170444:web:0a1b2b88071f2f4aebdd29"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const docRef = db.collection("grupos").doc("cerveja_2026");
+
+    docRef.onSnapshot((doc) => {
+      const data = doc.data();
+      document.getElementById("jaime").innerText = data.jaime;
+      document.getElementById("cux").innerText = data.cux;
+      document.getElementById("celula").innerText = data.celula;
+      document.getElementById("total").innerText =
+        (data.jaime + data.cux + data.celula).toFixed(1);
+    });
+
+    function addBeer(nome) {
+      docRef.update({
+        [nome]: firebase.firestore.FieldValue.increment(0.5)
+      });
+    }
+  </script>
+
+</body>
+</html>
