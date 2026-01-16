@@ -320,11 +320,47 @@ runner.classList.remove("beer-animate");
   }
 }
 
+// 📊 Gráfico de pizza (inicial)
+const ctx = document.getElementById("beerChart").getContext("2d");
+
+const beerChart = new Chart(ctx, {
+  type: "pie",
+  data: {
+    labels: ["Jaime", "Cux", "Célula"],
+    datasets: [
+      {
+        data: [1, 1, 1], // valores temporários
+        backgroundColor: [
+          "#81c784", // verde
+          "#fff176", // amarelo
+          "#ffb74d"  // laranja
+        ],
+        borderWidth: 1,
+        borderColor: "#fff"
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        position: "bottom",
+        labels: {
+          font: {
+            size: 13
+          }
+        }
+      }
+    }
+  }
+});
 
   </script>
 
 </body>
 </html>
+
 
 
 
