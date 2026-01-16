@@ -10,356 +10,287 @@
       background: #f6f6f6;
       padding: 20px;
     }
+
     h1, h2 {
       text-align: center;
     }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-top: 25px;
+      margin-bottom: 10px;
+    }
+
     .card {
-  max-width: 400px;
-  margin: 20px auto;
-  background: white;
-  padding: 18px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      max-width: 400px;
+      margin: 20px auto;
+      background: white;
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     }
+
     .row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
-  padding-bottom: 6px;
-  border-bottom: 1px dashed #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed #eee;
     }
+
     button {
       padding: 6px 10px;
       font-size: 14px;
       cursor: pointer;
     }
-	.progress-wrapper {
-  max-width: 420px;
-  margin: 30px auto;
-  text-align: center;
-}
 
-.progress-header {
-  font-weight: bold;
-  margin-bottom: 6px;
-}
+    .progress-wrapper {
+      max-width: 420px;
+      margin: 30px auto;
+      text-align: center;
+    }
 
-.progress-track {
-  position: relative;
-  height: 28px;
-  background: linear-gradient(
-    90deg,
-    #c8e6c9 0%,
-    #fff9c4 50%,
-    #ffe0b2 75%,
-    #ffcdd2 100%
-  );
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
-}
+    .progress-header {
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
 
-#runner {
-  position: absolute;
-  right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 24px;
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.25));
-}
+    .progress-track {
+      position: relative;
+      height: 28px;
+      background: linear-gradient(
+        90deg,
+        #c8e6c9 0%,
+        #fff9c4 50%,
+        #ffe0b2 75%,
+        #ffcdd2 100%
+      );
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+    }
 
-.meta-text {
-  margin-top: 12px;
-  font-size: 15px;
-  font-weight: 600;
-  color: #444;
-}
-h1 {
-  font-size: 24px;
-  margin-bottom: 10px;
-}
+    #runner {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 24px;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.25));
+    }
 
-h2 {
-  font-size: 20px;
-  margin-top: 25px;
-  margin-bottom: 10px;
-}
-@keyframes beer-bounce {
-  0%   { transform: translateY(-50%) scale(1); }
-  40%  { transform: translateY(-60%) scale(1.05); }
-  100% { transform: translateY(-50%) scale(1); }
-}
+    .meta-text {
+      margin-top: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #444;
+    }
 
-.beer-animate {
-  animation: beer-bounce 0.35s ease;
-}
+    @keyframes beer-bounce {
+      0% { transform: translateY(-50%) scale(1); }
+      40% { transform: translateY(-60%) scale(1.05); }
+      100% { transform: translateY(-50%) scale(1); }
+    }
 
-@keyframes beer-win {
-  0%   { transform: translateY(-50%) scale(1); }
-  50%  { transform: translateY(-50%) scale(1.3); }
-  100% { transform: translateY(-50%) scale(1.1); }
-}
+    .beer-animate {
+      animation: beer-bounce 0.35s ease;
+    }
 
-.beer-win {
-  animation: beer-win 0.6s ease forwards;
-}
+    @keyframes beer-win {
+      0% { transform: translateY(-50%) scale(1); }
+      50% { transform: translateY(-50%) scale(1.3); }
+      100% { transform: translateY(-50%) scale(1.1); }
+    }
 
-.chart-wrapper {
-  max-width: 320px;
-  margin: 20px auto 0;
-}
+    .beer-win {
+      animation: beer-win 0.6s ease forwards;
+    }
 
-#beerChart {
-  width: 100%;
-  height: auto;
-}
+    .chart-wrapper {
+      max-width: 320px;
+      margin: 20px auto 0;
+    }
 
+    #beerChart {
+      width: 100%;
+      height: auto;
+    }
   </style>
 </head>
 
 <body>
 
-  <h1>🍺 Contador de Cervejas – 2026</h1>
+<h1>🍺 Contador de Cervejas – 2026</h1>
 
-  <div class="card">
-    <div class="row">
-      <span id="label-jaime">Jaime</span>
-      <span id="jaime">0</span>
-	<button onclick="removeBeer('jaime')">-0,5</button>
-      <button onclick="addBeer('jaime')">+0,5</button>
-    </div>
-
-    <div class="row">
-      <span id="label-cux">Cux</span>
-      <span id="cux">0</span>
-	<button onclick="removeBeer('cux')">-0,5</button>
-      <button onclick="addBeer('cux')">+0,5</button>
-    </div>
-
-    <div class="row">
-      <span id="label-celula">Célula</span>
-      <span id="celula">0</span>
-	<button onclick="removeBeer('celula')">-0,5</button>
-      <button onclick="addBeer('celula')">+0,5</button>
-    </div>
+<div class="card">
+  <div class="row">
+    <span id="label-jaime">Jaime</span>
+    <span id="jaime">0</span>
+    <button onclick="removeBeer('jaime')">-0,5</button>
+    <button onclick="addBeer('jaime')">+0,5</button>
   </div>
 
-  <h2>Total do grupo: <span id="total">0</span> 🍺</h2>
-	<div class="progress-wrapper">
-  <div class="progress-header">🏁 31/12/2026</div>
+  <div class="row">
+    <span id="label-cux">Cux</span>
+    <span id="cux">0</span>
+    <button onclick="removeBeer('cux')">-0,5</button>
+    <button onclick="addBeer('cux')">+0,5</button>
+  </div>
 
+  <div class="row">
+    <span id="label-celula">Célula</span>
+    <span id="celula">0</span>
+    <button onclick="removeBeer('celula')">-0,5</button>
+    <button onclick="addBeer('celula')">+0,5</button>
+  </div>
+</div>
+
+<h2>Total do grupo: <span id="total">0</span> 🍺</h2>
+
+<div class="progress-wrapper">
+  <div class="progress-header">🏁 31/12/2026</div>
   <div class="progress-track">
     <div id="runner">🍺</div>
   </div>
+  <div id="meta-text" class="meta-text"></div>
 
-  
-    <div id="meta-text" class="meta-text"></div>
-<div class="chart-wrapper">
-  <canvas id="beerChart"></canvas>
+  <div class="chart-wrapper">
+    <canvas id="beerChart"></canvas>
+  </div>
 </div>
 
+<!-- Firebase + Chart.js -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <script>
-    // 🔑 COLE AQUI O firebaseConfig DO SEU PROJETO
-    const firebaseConfig = {
-      apiKey: "AIzaSyBbhjdbYuR9o4dBZtIuE8tr8H4-CEMA2xM",
-  authDomain: "one-thousand-beer.firebaseapp.com",
-  projectId: "one-thousand-beer",
-  storageBucket: "one-thousand-beer.firebasestorage.app",
-  messagingSenderId: "401765170444",
-  appId: "1:401765170444:web:0a1b2b88071f2f4aebdd29"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const docRef = db.collection("grupos").doc("cerveja_2026");
-
-    docRef.onSnapshot((doc) => {
-  const data = doc.data();
-
-  document.getElementById("jaime").innerText = data.jaime;
-  document.getElementById("cux").innerText = data.cux;
-  document.getElementById("celula").innerText = data.celula;
-
-  const total = data.jaime + data.cux + data.celula;
-  document.getElementById("total").innerText = total.toFixed(1);
-
-  atualizarRanking(data);
-
-  // 👇 ESTA LINHA É O QUE FALTAVA
-  atualizarCorrida(total);
-	atualizarTextoMeta(total);
-
-});
-
-
-    function addBeer(nome) {
-      docRef.update({
-        [nome]: firebase.firestore.FieldValue.increment(0.5)
-      });
-    }
-	function removeBeer(nome) {
-  docRef.get().then((doc) => {
-    const valorAtual = doc.data()[nome];
-
-    if (valorAtual >= 0.5) {
-      docRef.update({
-        [nome]: firebase.firestore.FieldValue.increment(-0.5)
-      });
-    }
-  });
-}
-
-function atualizarRanking(data) {
-  const pessoas = [
-    { nome: "jaime", valor: data.jaime },
-    { nome: "cux", valor: data.cux },
-    { nome: "celula", valor: data.celula }
-  ];
-
-  // Ordena do maior para o menor
-  pessoas.sort((a, b) => b.valor - a.valor);
-
-  // Extrai valores
-  const valores = pessoas.map(p => p.valor);
-  const unico = new Set(valores);
-
-  // Função auxiliar pra escrever o nome
-  const setLabel = (pessoa, emoji) => {
-    const nomeFormatado =
-      pessoa.nome.charAt(0).toUpperCase() + pessoa.nome.slice(1);
-    document.getElementById(`label-${pessoa.nome}`).innerText =
-      `${emoji} ${nomeFormatado}`;
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBbhjdbYuR9o4dBZtIuE8tr8H4-CEMA2xM",
+    authDomain: "one-thousand-beer.firebaseapp.com",
+    projectId: "one-thousand-beer",
+    storageBucket: "one-thousand-beer.firebasestorage.app",
+    messagingSenderId: "401765170444",
+    appId: "1:401765170444:web:0a1b2b88071f2f4aebdd29"
   };
 
-  // Limpa tudo antes
-  pessoas.forEach(p => setLabel(p, ""));
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const docRef = db.collection("grupos").doc("cerveja_2026");
 
-  // 🟠 TODOS EMPATADOS
-  if (unico.size === 1) {
-    pessoas.forEach(p => setLabel(p, "🍻"));
-    return;
-  }
-
-  // 🟡 EMPATE ENTRE DOIS
-  if (unico.size === 2) {
-    const [a, b, c] = pessoas;
-
-    // a e b empatados
-    if (a.valor === b.valor) {
-      setLabel(a, "🤝");
-      setLabel(b, "🤝");
-
-      if (c.valor > a.valor) {
-        setLabel(c, "🥇");
-      } else {
-        setLabel(c, "🐢");
-      }
-      return;
-    }
-
-    // b e c empatados
-    if (b.valor === c.valor) {
-      setLabel(b, "🤝");
-      setLabel(c, "🤝");
-
-      if (a.valor > b.valor) {
-        setLabel(a, "🥇");
-      } else {
-        setLabel(a, "🐢");
-      }
-      return;
-    }
-  }
-
-  // 🟢 SEM EMPATE
-  setLabel(pessoas[0], "🥇");
-  setLabel(pessoas[1], "👽");
-  setLabel(pessoas[2], "🐢");
-}
-
-	function atualizarCorrida(total) {
-  const meta = 1000;
-
-  // trava entre 0 e 1000
-  const progresso = Math.min(Math.max(total, 0), meta);
-
-  // percentual (0 a 100)
-  const percentual = (progresso / meta) * 100;
-
-  // como corre da direita pra esquerda
-  const posicao = 100 - percentual;
-
-  const runner = document.getElementById("runner");
-  runner.style.right = `calc(${posicao}% - 12px)`;
-runner.classList.remove("beer-animate");
-  void runner.offsetWidth; // força reflow
-  runner.classList.add("beer-animate");
-}
-	function atualizarTextoMeta(total) {
-  const meta = 1000;
-  const restante = meta - total;
-
-  const el = document.getElementById("meta-text");
-
-  if (restante <= 0) {
-  el.innerText = "🎉 META ATINGIDA! 1000 BRATCHOLAS 🍻🔥";
-
-  const runner = document.getElementById("runner");
-  runner.classList.add("beer-win");
-  } else {
-    el.innerText = `⏳ Faltam ${restante.toFixed(1)} bratcholas para chegar a 1000 🍺`;
-  }
-}
-
-// 📊 Gráfico de pizza (inicial)
-const ctx = document.getElementById("beerChart").getContext("2d");
-
-const beerChart = new Chart(ctx, {
-  type: "pie",
-  data: {
-    labels: ["Jaime", "Cux", "Célula"],
-    datasets: [
-      {
-        data: [1, 1, 1], // valores temporários
-        backgroundColor: [
-          "#81c784", // verde
-          "#fff176", // amarelo
-          "#ffb74d"  // laranja
-        ],
+  // 📊 GRÁFICO (CRIA PRIMEIRO)
+  const ctx = document.getElementById("beerChart").getContext("2d");
+  const beerChart = new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: ["Jaime", "Cux", "Célula"],
+      datasets: [{
+        data: [0, 0, 0],
+        backgroundColor: ["#81c784", "#fff176", "#ffb74d"],
         borderWidth: 1,
         borderColor: "#fff"
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    plugins: {
-      legend: {
-        position: "bottom",
-        labels: {
-          font: {
-            size: 13
-          }
-        }
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: "bottom" }
       }
     }
-  }
-});
+  });
 
-  </script>
+  // 🔥 SNAPSHOT
+  docRef.onSnapshot((doc) => {
+    const data = doc.data();
+
+    document.getElementById("jaime").innerText = data.jaime;
+    document.getElementById("cux").innerText = data.cux;
+    document.getElementById("celula").innerText = data.celula;
+
+    const total = data.jaime + data.cux + data.celula;
+    document.getElementById("total").innerText = total.toFixed(1);
+
+    atualizarRanking(data);
+    atualizarCorrida(total);
+    atualizarTextoMeta(total);
+
+    beerChart.data.datasets[0].data = [
+      data.jaime,
+      data.cux,
+      data.celula
+    ];
+    beerChart.update();
+  });
+
+  function addBeer(nome) {
+    docRef.update({ [nome]: firebase.firestore.FieldValue.increment(0.5) });
+  }
+
+  function removeBeer(nome) {
+    docRef.get().then(doc => {
+      if (doc.data()[nome] >= 0.5) {
+        docRef.update({ [nome]: firebase.firestore.FieldValue.increment(-0.5) });
+      }
+    });
+  }
+
+  function atualizarCorrida(total) {
+    const meta = 1000;
+    const percentual = Math.min(total / meta, 1) * 100;
+    const runner = document.getElementById("runner");
+
+    runner.style.right = `calc(${100 - percentual}% - 12px)`;
+    runner.classList.remove("beer-animate");
+    void runner.offsetWidth;
+    runner.classList.add("beer-animate");
+  }
+
+  function atualizarTextoMeta(total) {
+    const restante = 1000 - total;
+    const el = document.getElementById("meta-text");
+    if (restante <= 0) {
+      el.innerText = "🎉 META ATINGIDA! 1000 BRATCHOLAS 🍻🔥";
+      document.getElementById("runner").classList.add("beer-win");
+    } else {
+      el.innerText = `⏳ Faltam ${restante.toFixed(1)} bratcholas para chegar a 1000 🍺`;
+    }
+  }
+
+  function atualizarRanking(data) {
+    const pessoas = [
+      { nome: "jaime", valor: data.jaime },
+      { nome: "cux", valor: data.cux },
+      { nome: "celula", valor: data.celula }
+    ].sort((a,b)=>b.valor-a.valor);
+
+    const valores = pessoas.map(p=>p.valor);
+    const unico = new Set(valores);
+
+    pessoas.forEach(p=>{
+      document.getElementById(`label-${p.nome}`).innerText =
+        p.nome.charAt(0).toUpperCase()+p.nome.slice(1);
+    });
+
+    if (unico.size === 1) {
+      pessoas.forEach(p=>document.getElementById(`label-${p.nome}`).innerText="🍻 "+p.nome);
+      return;
+    }
+
+    document.getElementById(`label-${pessoas[0].nome}`).innerText="🥇 "+pessoas[0].nome;
+    document.getElementById(`label-${pessoas[1].nome}`).innerText="👽 "+pessoas[1].nome;
+    document.getElementById(`label-${pessoas[2].nome}`).innerText="🐢 "+pessoas[2].nome;
+  }
+</script>
 
 </body>
 </html>
+
 
 
 
