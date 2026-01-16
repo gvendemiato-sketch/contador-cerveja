@@ -1,171 +1,142 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>🍺 Contador de Cervejas</title>
+<meta charset="UTF-8">
+<title>🍺 Contador de Cervejas</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f6f6f6;
-      padding: 20px;
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f6f6f6;
+  padding: 20px;
+}
 
-    h1, h2 {
-      text-align: center;
-    }
+/* ===== HISTÓRICO SOCIAL ===== */
+.social-history {
+  position: fixed;
+  left: 15px;
+  top: 20px;
+  width: 260px;
+  background: white;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.1);
+}
 
-    h1 {
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
+.social-history h3 {
+  text-align: center;
+  margin-bottom: 8px;
+}
 
-    h2 {
-      font-size: 20px;
-      margin-top: 25px;
-      margin-bottom: 10px;
-    }
+.social-history ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+}
 
-    .card {
-      max-width: 400px;
-      margin: 20px auto;
-      background: white;
-      padding: 18px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    }
+.social-history li {
+  margin-bottom: 6px;
+  border-bottom: 1px dashed #eee;
+  padding-bottom: 4px;
+}
 
-    .row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-      padding-bottom: 6px;
-      border-bottom: 1px dashed #eee;
-      transition: background 0.3s;
-    }
+/* ===== CONTEÚDO ===== */
+h1, h2 { text-align: center; }
 
-    .row.leader {
-      background: #fffde7;
-      border-radius: 8px;
-      animation: leader-pulse 1.2s ease infinite;
-    }
+.card {
+  max-width: 400px;
+  margin: 20px auto;
+  background: white;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.08);
+}
 
-    button {
-      padding: 6px 10px;
-      font-size: 14px;
-      cursor: pointer;
-    }
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed #eee;
+}
 
-    .progress-wrapper {
-      max-width: 420px;
-      margin: 30px auto;
-      text-align: center;
-    }
+button {
+  padding: 6px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
 
-    .progress-header {
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
+.progress-wrapper {
+  max-width: 420px;
+  margin: 30px auto;
+  text-align: center;
+}
 
-    .progress-track {
-      position: relative;
-      height: 28px;
-      background: linear-gradient(
-        90deg,
-        #c8e6c9 0%,
-        #fff9c4 50%,
-        #ffe0b2 75%,
-        #ffcdd2 100%
-      );
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
-    }
+.progress-track {
+  position: relative;
+  height: 28px;
+  background: linear-gradient(90deg,#c8e6c9,#fff9c4,#ffe0b2,#ffcdd2);
+  border-radius: 20px;
+  overflow: hidden;
+}
 
-    #runner {
-      position: absolute;
-      right: 6px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 24px;
-      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.25));
-    }
+#runner {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+}
 
-    .meta-text {
-      margin-top: 12px;
-      font-size: 15px;
-      font-weight: 600;
-      color: #444;
-    }
+.meta-text {
+  margin-top: 12px;
+  font-weight: bold;
+}
 
-    .chart-wrapper {
-      max-width: 320px;
-      margin: 20px auto 0;
-    }
+.chart-wrapper {
+  max-width: 320px;
+  margin: 20px auto;
+}
 
-    /* ANIMAÇÕES */
+/* ===== ANIMAÇÕES ===== */
+@keyframes beer-bounce {
+  0% { transform: translateY(-50%) scale(1); }
+  40% { transform: translateY(-60%) scale(1.05); }
+  100% { transform: translateY(-50%) scale(1); }
+}
+.beer-animate { animation: beer-bounce .35s ease; }
 
-    @keyframes beer-bounce {
-      0% { transform: translateY(-50%) scale(1); }
-      40% { transform: translateY(-60%) scale(1.08); }
-      100% { transform: translateY(-50%) scale(1); }
-    }
-
-    .beer-animate {
-      animation: beer-bounce 0.35s ease;
-    }
-
-    @keyframes beer-win {
-      0% { transform: translateY(-50%) scale(1); }
-      50% { transform: translateY(-50%) scale(1.3); }
-      100% { transform: translateY(-50%) scale(1.1); }
-    }
-
-    .beer-win {
-      animation: beer-win 0.6s ease forwards;
-    }
-
-    @keyframes leader-pulse {
-      0% { box-shadow: 0 0 0 rgba(255,193,7,0.6); }
-      50% { box-shadow: 0 0 12px rgba(255,193,7,0.9); }
-      100% { box-shadow: 0 0 0 rgba(255,193,7,0.6); }
-    }
-
-    @keyframes chart-pop {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-
-    .chart-animate {
-      animation: chart-pop 0.4s ease;
-    }
-  </style>
+@keyframes beer-win {
+  0% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.3); }
+  100% { transform: translateY(-50%) scale(1.1); }
+}
+.beer-win { animation: beer-win .6s ease forwards; }
+</style>
 </head>
 
 <body>
 
+<!-- HISTÓRICO SOCIAL -->
+<div class="social-history">
+  <h3>📜 Histórico</h3>
+  <ul id="social-log"></ul>
+</div>
+
 <h1>🍺 Contador de Cervejas – 2026</h1>
 
 <div class="card">
-  <div class="row" id="row-jaime">
-    <span id="label-jaime">Jaime</span>
-    <span id="jaime">0</span>
+  <div class="row"><span id="label-jaime">Jaime</span><span id="jaime">0</span>
     <button onclick="removeBeer('jaime')">-0,5</button>
     <button onclick="addBeer('jaime')">+0,5</button>
   </div>
-
-  <div class="row" id="row-cux">
-    <span id="label-cux">Cux</span>
-    <span id="cux">0</span>
+  <div class="row"><span id="label-cux">Cux</span><span id="cux">0</span>
     <button onclick="removeBeer('cux')">-0,5</button>
     <button onclick="addBeer('cux')">+0,5</button>
   </div>
-
-  <div class="row" id="row-celula">
-    <span id="label-celula">Célula</span>
-    <span id="celula">0</span>
+  <div class="row"><span id="label-celula">Célula</span><span id="celula">0</span>
     <button onclick="removeBeer('celula')">-0,5</button>
     <button onclick="addBeer('celula')">+0,5</button>
   </div>
@@ -174,154 +145,138 @@
 <h2>Total do grupo: <span id="total">0</span> 🍺</h2>
 
 <div class="progress-wrapper">
-  <div class="progress-header">🏁 31/12/2026</div>
-  <div class="progress-track">
-    <div id="runner">🍺</div>
-  </div>
+  <div>🏁 31/12/2026</div>
+  <div class="progress-track"><div id="runner">🍺</div></div>
   <div id="meta-text" class="meta-text"></div>
-
-  <div class="chart-wrapper">
-    <canvas id="beerChart"></canvas>
-  </div>
 </div>
 
+<div class="chart-wrapper">
+  <canvas id="beerChart"></canvas>
+</div>
+
+<!-- Firebase + Chart -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyBbhjdbYuR9o4dBZtIuE8tr8H4-CEMA2xM",
-    authDomain: "one-thousand-beer.firebaseapp.com",
-    projectId: "one-thousand-beer",
-    storageBucket: "one-thousand-beer.firebasestorage.app",
-    messagingSenderId: "401765170444",
-    appId: "1:401765170444:web:0a1b2b88071f2f4aebdd29"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyBbhjdbYuR9o4dBZtIuE8tr8H4-CEMA2xM",
+  authDomain: "one-thousand-beer.firebaseapp.com",
+  projectId: "one-thousand-beer"
+};
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const docRef = db.collection("grupos").doc("cerveja_2026");
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const docRef = db.collection("grupos").doc("cerveja_2026");
 
-  const ctx = document.getElementById("beerChart").getContext("2d");
-  const beerChart = new Chart(ctx, {
-    type: "pie",
-    data: {
-      labels: ["Jaime", "Cux", "Célula"],
-      datasets: [{
-        data: [0, 0, 0],
-        backgroundColor: ["#81c784", "#fff176", "#ffb74d"],
-        borderColor: "#fff",
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { position: "bottom" } }
+/* ===== HISTÓRICO ===== */
+let historico = [];
+let ultimoLider = null;
+let metasBatidas = new Set();
+
+function logEvento(texto) {
+  historico.unshift("🍺 " + texto);
+  if (historico.length > 10) historico.pop();
+  document.getElementById("social-log").innerHTML =
+    historico.map(e => `<li>${e}</li>`).join("");
+}
+
+docRef.onSnapshot(doc => {
+  const d = doc.data();
+  const total = d.jaime + d.cux + d.celula;
+
+  ["jaime","cux","celula"].forEach(n => document.getElementById(n).innerText = d[n]);
+  document.getElementById("total").innerText = total.toFixed(1);
+
+  atualizarRanking(d);
+  atualizarCorrida(total);
+  atualizarTextoMeta(total);
+  atualizarHistorico(d, total);
+
+  beerChart.data.datasets[0].data = [d.jaime, d.cux, d.celula];
+  beerChart.update();
+});
+
+function atualizarHistorico(d, total) {
+  const arr = [
+    {n:"Jaime",v:d.jaime},
+    {n:"Cux",v:d.cux},
+    {n:"Célula",v:d.celula}
+  ].sort((a,b)=>b.v-a.v);
+
+  if (arr[0].v !== arr[1].v && arr[0].n !== ultimoLider) {
+    logEvento(`${arr[0].n} virou líder 🥇`);
+    ultimoLider = arr[0].n;
+  }
+
+  if (arr[0].v === arr[1].v) {
+    logEvento("Empate detectado 🤝");
+  }
+
+  [250,500,750,950,1000].forEach(m => {
+    if (total >= m && !metasBatidas.has(m)) {
+      logEvento(`O time chegou à marca de ${m} 🍻`);
+      metasBatidas.add(m);
     }
   });
+}
 
-  docRef.onSnapshot((doc) => {
-    const data = doc.data();
-    const total = data.jaime + data.cux + data.celula;
+/* ===== RANKING ===== */
+function atualizarRanking(d){
+  const p=[
+    {n:"jaime",v:d.jaime},
+    {n:"cux",v:d.cux},
+    {n:"celula",v:d.celula}
+  ].sort((a,b)=>b.v-a.v);
 
-    ["jaime","cux","celula"].forEach(p => {
-      document.getElementById(p).innerText = data[p];
-      document.getElementById("row-"+p).classList.remove("leader");
-    });
+  const vals=p.map(x=>x.v);
+  const uniq=new Set(vals);
 
-    document.getElementById("total").innerText = total.toFixed(1);
+  const set=(x,e)=>document.getElementById("label-"+x.n).innerText=`${e} ${x.n[0].toUpperCase()+x.n.slice(1)}`;
 
-    beerChart.data.datasets[0].data = [data.jaime, data.cux, data.celula];
-    beerChart.update();
-    beerChart.canvas.classList.remove("chart-animate");
-    void beerChart.canvas.offsetWidth;
-    beerChart.canvas.classList.add("chart-animate");
-
-    atualizarRanking(data);
-    atualizarTextoMeta(total);
-    atualizarCorrida(total);
-  });
-
-  function addBeer(nome){ docRef.update({[nome]:firebase.firestore.FieldValue.increment(0.5)}); }
-  function removeBeer(nome){
-    docRef.get().then(doc=>{
-      if(doc.data()[nome]>=0.5){
-        docRef.update({[nome]:firebase.firestore.FieldValue.increment(-0.5)});
-      }
-    });
+  if(uniq.size===1){p.forEach(x=>set(x,"🍻"));return;}
+  if(uniq.size===2){
+    if(p[0].v===p[1].v){set(p[0],"🤝");set(p[1],"🤝");set(p[2],"🐢");return;}
   }
+  set(p[0],"🥇");set(p[1],"👽");set(p[2],"🐢");
+}
 
-  function atualizarRanking(data){
-    const pessoas=[
-      {nome:"jaime",valor:data.jaime},
-      {nome:"cux",valor:data.cux},
-      {nome:"celula",valor:data.celula}
-    ];
+/* ===== PROGRESSO ===== */
+function atualizarCorrida(total){
+  const perc=Math.min(total/1000*100,100);
+  const r=document.getElementById("runner");
+  r.style.right=`calc(${100-perc}% - 12px)`;
+  r.classList.remove("beer-animate");void r.offsetWidth;r.classList.add("beer-animate");
+}
 
-    pessoas.forEach(p=>{
-      document.getElementById(`row-${p.nome}`).classList.remove("leader");
-    });
-
-    pessoas.sort((a,b)=>b.valor-a.valor);
-    const valores=pessoas.map(p=>p.valor);
-    const unico=new Set(valores);
-
-    const setLabel=(p,e)=>{
-      const nome=p.nome.charAt(0).toUpperCase()+p.nome.slice(1);
-      document.getElementById(`label-${p.nome}`).innerText=`${e} ${nome}`;
-    };
-
-    if(unico.size===1){
-      pessoas.forEach(p=>setLabel(p,"🍻"));
-      return;
-    }
-
-    if(unico.size===2){
-      const[a,b,c]=pessoas;
-      if(a.valor===b.valor){
-        setLabel(a,"🤝"); setLabel(b,"🤝");
-        setLabel(c,c.valor>a.valor?"🥇":"🐢");
-        document.getElementById(`row-${c.valor>a.valor?c.nome:a.nome}`).classList.add("leader");
-        return;
-      }
-      if(b.valor===c.valor){
-        setLabel(b,"🤝"); setLabel(c,"🤝");
-        setLabel(a,a.valor>b.valor?"🥇":"🐢");
-        document.getElementById(`row-${a.nome}`).classList.add("leader");
-        return;
-      }
-    }
-
-    setLabel(pessoas[0],"🥇");
-    setLabel(pessoas[1],"👽");
-    setLabel(pessoas[2],"🐢");
-    document.getElementById(`row-${pessoas[0].nome}`).classList.add("leader");
+function atualizarTextoMeta(total){
+  const r=document.getElementById("meta-text");
+  if(total>=1000){
+    r.innerText="🎉 META ATINGIDA! 1000 BRATCHOLAS 🍻🔥";
+    document.getElementById("runner").classList.add("beer-win");
+  } else {
+    r.innerText=`⏳ Faltam ${(1000-total).toFixed(1)} bratcholas`;
   }
+}
 
-  function atualizarCorrida(total){
-    const runner=document.getElementById("runner");
-    const pct=Math.min(total/1000,1)*100;
-    runner.style.right=`calc(${100-pct}% - 12px)`;
-    runner.classList.remove("beer-animate");
-    void runner.offsetWidth;
-    runner.classList.add("beer-animate");
-  }
+/* ===== BOTÕES ===== */
+function addBeer(n){docRef.update({[n]:firebase.firestore.FieldValue.increment(.5)});}
+function removeBeer(n){docRef.get().then(d=>d.data()[n]>=.5&&docRef.update({[n]:firebase.firestore.FieldValue.increment(-.5)}));}
 
-  function atualizarTextoMeta(total){
-    const el=document.getElementById("meta-text");
-    const rest=1000-total;
-    if(rest<=0){
-      el.innerText="🎉 META ATINGIDA! 1000 BRATCHOLAS 🍻🔥";
-      document.getElementById("runner").classList.add("beer-win");
-    }else{
-      el.innerText=`⏳ Faltam ${rest.toFixed(1)} bratcholas para chegar a 1000 🍺`;
-    }
+/* ===== GRÁFICO ===== */
+const beerChart=new Chart(document.getElementById("beerChart"),{
+  type:"pie",
+  data:{
+    labels:["Jaime","Cux","Célula"],
+    datasets:[{data:[1,1,1],backgroundColor:["#81c784","#fff176","#ffb74d"]}]
   }
+});
 </script>
-
 </body>
 </html>
+
+
 
 
 
