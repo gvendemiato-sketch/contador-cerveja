@@ -85,6 +85,26 @@ h2 {
   margin-top: 25px;
   margin-bottom: 10px;
 }
+@keyframes beer-bounce {
+  0%   { transform: translateY(-50%) scale(1); }
+  40%  { transform: translateY(-60%) scale(1.05); }
+  100% { transform: translateY(-50%) scale(1); }
+}
+
+.beer-animate {
+  animation: beer-bounce 0.35s ease;
+}
+
+@keyframes beer-win {
+  0%   { transform: translateY(-50%) scale(1); }
+  50%  { transform: translateY(-50%) scale(1.3); }
+  100% { transform: translateY(-50%) scale(1.1); }
+}
+
+.beer-win {
+  animation: beer-win 0.6s ease forwards;
+}
+
 
   </style>
 </head>
@@ -268,6 +288,9 @@ function atualizarRanking(data) {
 
   const runner = document.getElementById("runner");
   runner.style.right = `calc(${posicao}% - 12px)`;
+runner.classList.remove("beer-animate");
+  void runner.offsetWidth; // força reflow
+  runner.classList.add("beer-animate");
 }
 	function atualizarTextoMeta(total) {
   const meta = 1000;
@@ -276,7 +299,10 @@ function atualizarRanking(data) {
   const el = document.getElementById("meta-text");
 
   if (restante <= 0) {
-    el.innerText = "🎉 META ATINGIDA! 1000 BRATCHOLAS 🍻🔥";
+  el.innerText = "🎉 META ATINGIDA! 1000 BRATCHOLAS 🍻🔥";
+
+  const runner = document.getElementById("runner");
+  runner.classList.add("beer-win");
   } else {
     el.innerText = `⏳ Faltam ${restante.toFixed(1)} bratcholas para chegar a 1000 🍺`;
   }
@@ -287,6 +313,7 @@ function atualizarRanking(data) {
 
 </body>
 </html>
+
 
 
 
