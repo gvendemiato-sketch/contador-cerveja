@@ -127,14 +127,21 @@
     const docRef = db.collection("grupos").doc("cerveja_2026");
 
     docRef.onSnapshot((doc) => {
-      const data = doc.data();
-      document.getElementById("jaime").innerText = data.jaime;
-      document.getElementById("cux").innerText = data.cux;
-      document.getElementById("celula").innerText = data.celula;
-      document.getElementById("total").innerText =
-        (data.jaime + data.cux + data.celula).toFixed(1);
-	atualizarRanking(data);
-    });
+  const data = doc.data();
+
+  document.getElementById("jaime").innerText = data.jaime;
+  document.getElementById("cux").innerText = data.cux;
+  document.getElementById("celula").innerText = data.celula;
+
+  const total = data.jaime + data.cux + data.celula;
+  document.getElementById("total").innerText = total.toFixed(1);
+
+  atualizarRanking(data);
+
+  // 👇 ESTA LINHA É O QUE FALTAVA
+  atualizarCorrida(total);
+});
+
 
     function addBeer(nome) {
       docRef.update({
@@ -221,10 +228,28 @@ function atualizarRanking(data) {
   setLabel(pessoas[2], "🐢");
 }
 
+	function atualizarCorrida(total) {
+  const meta = 1000;
+
+  // trava entre 0 e 1000
+  const progresso = Math.min(Math.max(total, 0), meta);
+
+  // percentual (0 a 100)
+  const percentual = (progresso / meta) * 100;
+
+  // como corre da direita pra esquerda
+  const posicao = 100 - percentual;
+
+  const runner = document.getElementById("runner");
+  runner.style.right = `calc(${posicao}% - 12px)`;
+}
+
+
   </script>
 
 </body>
 </html>
+
 
 
 
