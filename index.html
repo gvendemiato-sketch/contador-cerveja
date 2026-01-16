@@ -40,21 +40,21 @@
 
   <div class="card">
     <div class="row">
-      <span>Jaime</span>
+      <span id="label-jaime">Jaime</span>
       <span id="jaime">0</span>
 	<button onclick="removeBeer('jaime')">-0,5</button>
       <button onclick="addBeer('jaime')">+0,5</button>
     </div>
 
     <div class="row">
-      <span>Cux</span>
+      <span id="label-cux">Cux</span>
       <span id="cux">0</span>
 	<button onclick="removeBeer('cux')">-0,5</button>
       <button onclick="addBeer('cux')">+0,5</button>
     </div>
 
     <div class="row">
-      <span>Célula</span>
+      <span id="label-celula">Célula</span>
       <span id="celula">0</span>
 	<button onclick="removeBeer('celula')">-0,5</button>
       <button onclick="addBeer('celula')">+0,5</button>
@@ -108,7 +108,46 @@
   });
 }
 
+function atualizarRanking(data) {
+  const pessoas = [
+    { nome: "jaime", valor: data.jaime },
+    { nome: "cux", valor: data.cux },
+    { nome: "celula", valor: data.celula }
+  ];
+
+  pessoas.sort((a, b) => b.valor - a.valor);
+
+  const valores = pessoas.map(p => p.valor);
+  const temEmpate = new Set(valores).size !== valores.length;
+
+  pessoas.forEach(p => {
+    document.getElementById(`label-${p.nome}`).innerText =
+      p.nome.charAt(0).toUpperCase() + p.nome.slice(1);
+  });
+
+  if (temEmpate) {
+    pessoas.forEach(p => {
+      document.getElementById(`label-${p.nome}`).innerText =
+        "🫶 " + p.nome.charAt(0).toUpperCase() + p.nome.slice(1);
+    });
+    return;
+  }
+
+  document.getElementById(`label-${pessoas[0].nome}`).innerText =
+    "🥇 " + pessoas[0].nome.charAt(0).toUpperCase() + pessoas[0].nome.slice(1);
+
+  document.getElementById(`label-${pessoas[1].nome}`).innerText =
+    "👽 " + pessoas[1].nome.charAt(0).toUpperCase() + pessoas[1].nome.slice(1);
+
+  document.getElementById(`label-${pessoas[2].nome}`).innerText =
+    "🐢 " + pessoas[2].nome.charAt(0).toUpperCase() + pessoas[2].nome.slice(1);
+}
+
   </script>
 
 </body>
 </html>
+
+</body>
+</html>
+
