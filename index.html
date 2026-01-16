@@ -101,9 +101,10 @@
     <div id="runner">🍺</div>
   </div>
 
-  <div class="meta-text">
-    ⏳ Faltam 1000 bratcholas para chegar a 1000 🍺
-  </div>
+  
+    <div id="meta-text" class="meta-text"></div>
+
+  
 </div>
 
 
@@ -140,6 +141,8 @@
 
   // 👇 ESTA LINHA É O QUE FALTAVA
   atualizarCorrida(total);
+	atualizarTextoMeta(total);
+
 });
 
 
@@ -243,12 +246,25 @@ function atualizarRanking(data) {
   const runner = document.getElementById("runner");
   runner.style.right = `calc(${posicao}% - 12px)`;
 }
+	function atualizarTextoMeta(total) {
+  const meta = 1000;
+  const restante = meta - total;
+
+  const el = document.getElementById("meta-text");
+
+  if (restante <= 0) {
+    el.innerText = "🎉 META ATINGIDA! 1000 BRATCHOLAS 🍻🔥";
+  } else {
+    el.innerText = `⏳ Faltam ${restante.toFixed(1)} bratcholas para chegar a 1000 🍺`;
+  }
+}
 
 
   </script>
 
 </body>
 </html>
+
 
 
 
