@@ -105,6 +105,15 @@ h2 {
   animation: beer-win 0.6s ease forwards;
 }
 
+.chart-wrapper {
+  max-width: 320px;
+  margin: 20px auto 0;
+}
+
+#beerChart {
+  width: 100%;
+  height: auto;
+}
 
   </style>
 </head>
@@ -146,9 +155,11 @@ h2 {
 
   
     <div id="meta-text" class="meta-text"></div>
-
-  
+<div class="chart-wrapper">
+  <canvas id="beerChart"></canvas>
 </div>
+
+
 
 
   <!-- Firebase -->
@@ -313,6 +324,7 @@ runner.classList.remove("beer-animate");
 
 </body>
 </html>
+
 
 
 
