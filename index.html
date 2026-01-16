@@ -116,39 +116,71 @@ function atualizarRanking(data) {
     { nome: "celula", valor: data.celula }
   ];
 
+  // Ordena do maior para o menor
   pessoas.sort((a, b) => b.valor - a.valor);
 
+  // Extrai valores
   const valores = pessoas.map(p => p.valor);
-  const temEmpate = new Set(valores).size !== valores.length;
+  const unico = new Set(valores);
 
-  pessoas.forEach(p => {
-    document.getElementById(`label-${p.nome}`).innerText =
-      p.nome.charAt(0).toUpperCase() + p.nome.slice(1);
-  });
+  // Função auxiliar pra escrever o nome
+  const setLabel = (pessoa, emoji) => {
+    const nomeFormatado =
+      pessoa.nome.charAt(0).toUpperCase() + pessoa.nome.slice(1);
+    document.getElementById(`label-${pessoa.nome}`).innerText =
+      `${emoji} ${nomeFormatado}`;
+  };
 
-  if (temEmpate) {
-    pessoas.forEach(p => {
-      document.getElementById(`label-${p.nome}`).innerText =
-        "🫶 " + p.nome.charAt(0).toUpperCase() + p.nome.slice(1);
-    });
+  // Limpa tudo antes
+  pessoas.forEach(p => setLabel(p, ""));
+
+  // 🟠 TODOS EMPATADOS
+  if (unico.size === 1) {
+    pessoas.forEach(p => setLabel(p, "🍻"));
     return;
   }
 
-  document.getElementById(`label-${pessoas[0].nome}`).innerText =
-    "🥇 " + pessoas[0].nome.charAt(0).toUpperCase() + pessoas[0].nome.slice(1);
+  // 🟡 EMPATE ENTRE DOIS
+  if (unico.size === 2) {
+    const [a, b, c] = pessoas;
 
-  document.getElementById(`label-${pessoas[1].nome}`).innerText =
-    "👽 " + pessoas[1].nome.charAt(0).toUpperCase() + pessoas[1].nome.slice(1);
+    // a e b empatados
+    if (a.valor === b.valor) {
+      setLabel(a, "🤝");
+      setLabel(b, "🤝");
 
-  document.getElementById(`label-${pessoas[2].nome}`).innerText =
-    "🐢 " + pessoas[2].nome.charAt(0).toUpperCase() + pessoas[2].nome.slice(1);
+      if (c.valor > a.valor) {
+        setLabel(c, "🥇");
+      } else {
+        setLabel(c, "🐢");
+      }
+      return;
+    }
+
+    // b e c empatados
+    if (b.valor === c.valor) {
+      setLabel(b, "🤝");
+      setLabel(c, "🤝");
+
+      if (a.valor > b.valor) {
+        setLabel(a, "🥇");
+      } else {
+        setLabel(a, "🐢");
+      }
+      return;
+    }
+  }
+
+  // 🟢 SEM EMPATE
+  setLabel(pessoas[0], "🥇");
+  setLabel(pessoas[1], "👽");
+  setLabel(pessoas[2], "🐢");
 }
 
   </script>
 
 </body>
 </html>
-
 
 
 
