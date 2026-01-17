@@ -11,15 +11,11 @@ body {
   padding: 20px;
 }
 
-/* ===== LAYOUT ===== */
-.layout {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
 /* ===== HISTÓRICO SOCIAL ===== */
 .social-history {
+  position: fixed;
+  left: 15px;
+  top: 20px;
   width: 260px;
   background: white;
   border-radius: 12px;
@@ -37,8 +33,6 @@ body {
   padding: 0;
   margin: 0;
   font-size: 13px;
-  max-height: 360px;
-  overflow-y: auto;
 }
 
 .social-history li {
@@ -48,14 +42,11 @@ body {
 }
 
 /* ===== CONTEÚDO ===== */
-.content {
-  max-width: 420px;
-  width: 100%;
-}
-
 h1, h2 { text-align: center; }
 
 .card {
+  max-width: 400px;
+  margin: 20px auto;
   background: white;
   padding: 18px;
   border-radius: 12px;
@@ -77,21 +68,8 @@ button {
   cursor: pointer;
 }
 
-/* ===== LÍDER (BRILHO) ===== */
-.leader {
-  color: #ff9800;
-  font-weight: bold;
-  text-shadow: 0 0 8px rgba(255,152,0,.9);
-  animation: glow 1.2s infinite alternate;
-}
-
-@keyframes glow {
-  from { text-shadow: 0 0 6px rgba(255,152,0,.4); }
-  to { text-shadow: 0 0 14px rgba(255,152,0,1); }
-}
-
-/* ===== PROGRESSO ===== */
 .progress-wrapper {
+  max-width: 420px;
   margin: 30px auto;
   text-align: center;
 }
@@ -136,70 +114,115 @@ button {
   100% { transform: translateY(-50%) scale(1.1); }
 }
 .beer-win { animation: beer-win .6s ease forwards; }
-
-/* ===== MOBILE ===== */
-@media (max-width: 768px) {
-  .layout {
-    flex-direction: column;
-  }
-}
 </style>
 </head>
 
 <body>
 
+<!-- HISTÓRICO SOCIAL -->
+<div class="social-history">
+  <h3>📜 Histórico</h3>
+  <ul id="social-log"></ul>
+</div>
+
 <h1>🍺 Contador de Cervejas – 2026</h1>
 
-<div class="layout">
-
-  <!-- HISTÓRICO -->
-  <div class="social-history">
-    <h3>📜 Histórico</h3>
-    <ul id="social-log"></ul>
+<div class="card">
+  <div class="row"><span id="label-jaime">Jaime</span><span id="jaime">0</span>
+    <button onclick="removeBeer('jaime')">-0,5</button>
+    <button onclick="addBeer('jaime')">+0,5</button>
   </div>
-
-  <!-- CONTEÚDO -->
-  <div class="content">
-
-    <div class="card">
-      <div class="row"><span id="label-jaime">Jaime</span><span id="jaime">0</span>
-        <button onclick="removeBeer('jaime')">-0,5</button>
-        <button onclick="addBeer('jaime')">+0,5</button>
-      </div>
-      <div class="row"><span id="label-cux">Cux</span><span id="cux">0</span>
-        <button onclick="removeBeer('cux')">-0,5</button>
-        <button onclick="addBeer('cux')">+0,5</button>
-      </div>
-      <div class="row"><span id="label-celula">Célula</span><span id="celula">0</span>
-        <button onclick="removeBeer('celula')">-0,5</button>
-        <button onclick="addBeer('celula')">+0,5</button>
-      </div>
-    </div>
-
-    <h2>Total do grupo: <span id="total">0</span> 🍺</h2>
-
-    <div class="progress-wrapper">
-      <div>🏁 31/12/2026</div>
-      <div class="progress-track"><div id="runner">🍺</div></div>
-      <div id="meta-text" class="meta-text"></div>
-    </div>
-
-    <div class="chart-wrapper">
-      <canvas id="beerChart"></canvas>
-    </div>
-
+  <div class="row"><span id="label-cux">Cux</span><span id="cux">0</span>
+    <button onclick="removeBeer('cux')">-0,5</button>
+    <button onclick="addBeer('cux')">+0,5</button>
+  </div>
+  <div class="row"><span id="label-celula">Célula</span><span id="celula">0</span>
+    <button onclick="removeBeer('celula')">-0,5</button>
+    <button onclick="addBeer('celula')">+0,5</button>
   </div>
 </div>
 
-<!-- SCRIPTS (JS ORIGINAL + 1 LINHA NOVA) -->
+<h2>Total do grupo: <span id="total">0</span> 🍺</h2>
+
+<div class="progress-wrapper">
+  <div>🏁 31/12/2026</div>
+  <div class="progress-track"><div id="runner">🍺</div></div>
+  <div id="meta-text" class="meta-text"></div>
+</div>
+
+<div class="chart-wrapper">
+  <canvas id="beerChart"></canvas>
+</div>
+
+<!-- Firebase + Chart -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-/* 🔽 TODO O SEU JS ORIGINAL PERMANECE */
-/* ÚNICA ALTERAÇÃO: adicionar .leader no primeiro */
+const firebaseConfig = {
+  apiKey: "AIzaSyBbhjdbYuR9o4dBZtIuE8tr8H4-CEMA2xM",
+  authDomain: "one-thousand-beer.firebaseapp.com",
+  projectId: "one-thousand-beer"
+};
 
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const docRef = db.collection("grupos").doc("cerveja_2026");
+
+/* ===== HISTÓRICO ===== */
+let historico = [];
+let ultimoLider = null;
+let metasBatidas = new Set();
+
+function logEvento(texto) {
+  historico.unshift("🍺 " + texto);
+  if (historico.length > 10) historico.pop();
+  document.getElementById("social-log").innerHTML =
+    historico.map(e => `<li>${e}</li>`).join("");
+}
+
+docRef.onSnapshot(doc => {
+  const d = doc.data();
+  const total = d.jaime + d.cux + d.celula;
+
+  ["jaime","cux","celula"].forEach(n => document.getElementById(n).innerText = d[n]);
+  document.getElementById("total").innerText = total.toFixed(1);
+
+  atualizarRanking(d);
+  atualizarCorrida(total);
+  atualizarTextoMeta(total);
+  atualizarHistorico(d, total);
+
+  beerChart.data.datasets[0].data = [d.jaime, d.cux, d.celula];
+  beerChart.update();
+});
+
+function atualizarHistorico(d, total) {
+  const arr = [
+    {n:"Jaime",v:d.jaime},
+    {n:"Cux",v:d.cux},
+    {n:"Célula",v:d.celula}
+  ].sort((a,b)=>b.v-a.v);
+
+  if (arr[0].v !== arr[1].v && arr[0].n !== ultimoLider) {
+    logEvento(`${arr[0].n} virou líder 🥇`);
+    ultimoLider = arr[0].n;
+  }
+
+  if (arr[0].v === arr[1].v) {
+    logEvento("Empate detectado 🤝");
+  }
+
+  [250,500,750,950,1000].forEach(m => {
+    if (total >= m && !metasBatidas.has(m)) {
+      logEvento(`O time chegou à marca de ${m} 🍻`);
+      metasBatidas.add(m);
+    }
+  });
+}
+
+/* ===== RANKING ===== */
 function atualizarRanking(d){
   const p=[
     {n:"jaime",v:d.jaime},
@@ -207,33 +230,51 @@ function atualizarRanking(d){
     {n:"celula",v:d.celula}
   ].sort((a,b)=>b.v-a.v);
 
-  document.querySelectorAll(".leader").forEach(e=>e.classList.remove("leader"));
-
-  const set=(x,e,isLeader=false)=>{
-    const el=document.getElementById("label-"+x.n);
-    el.innerText=`${e} ${x.n[0].toUpperCase()+x.n.slice(1)}`;
-    if(isLeader) el.classList.add("leader");
-  };
-
   const vals=p.map(x=>x.v);
   const uniq=new Set(vals);
 
+  const set=(x,e)=>document.getElementById("label-"+x.n).innerText=`${e} ${x.n[0].toUpperCase()+x.n.slice(1)}`;
+
   if(uniq.size===1){p.forEach(x=>set(x,"🍻"));return;}
-  if(uniq.size===2 && p[0].v===p[1].v){
-    set(p[0],"🤝");set(p[1],"🤝");set(p[2],"🐢");return;
+  if(uniq.size===2){
+    if(p[0].v===p[1].v){set(p[0],"🤝");set(p[1],"🤝");set(p[2],"🐢");return;}
   }
-
-  set(p[0],"🥇",true);
-  set(p[1],"👽");
-  set(p[2],"🐢");
+  set(p[0],"🥇");set(p[1],"👽");set(p[2],"🐢");
 }
-</script>
 
+/* ===== PROGRESSO ===== */
+function atualizarCorrida(total){
+  const perc=Math.min(total/1000*100,100);
+  const r=document.getElementById("runner");
+  r.style.right=`calc(${100-perc}% - 12px)`;
+  r.classList.remove("beer-animate");void r.offsetWidth;r.classList.add("beer-animate");
+}
+
+function atualizarTextoMeta(total){
+  const r=document.getElementById("meta-text");
+  if(total>=1000){
+    r.innerText="🎉 META ATINGIDA! 1000 BRATCHOLAS 🍻🔥";
+    document.getElementById("runner").classList.add("beer-win");
+  } else {
+    r.innerText=`⏳ Faltam ${(1000-total).toFixed(1)} bratcholas`;
+  }
+}
+
+/* ===== BOTÕES ===== */
+function addBeer(n){docRef.update({[n]:firebase.firestore.FieldValue.increment(.5)});}
+function removeBeer(n){docRef.get().then(d=>d.data()[n]>=.5&&docRef.update({[n]:firebase.firestore.FieldValue.increment(-.5)}));}
+
+/* ===== GRÁFICO ===== */
+const beerChart=new Chart(document.getElementById("beerChart"),{
+  type:"pie",
+  data:{
+    labels:["Jaime","Cux","Célula"],
+    datasets:[{data:[1,1,1],backgroundColor:["#81c784","#fff176","#ffb74d"]}]
+  }
+});
+</script>
 </body>
 </html>
-
-
-
 
 
 
