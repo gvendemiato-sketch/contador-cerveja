@@ -11,66 +11,83 @@ body {
   padding: 20px;
 }
 
-/* ===== HISTÓRICO SOCIAL ===== */
-.social-history {
-  position: fixed;
-  left: 15px;
-  top: 20px;
+/* ===== LAYOUT ===== */
+.main-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.history-panel {
   width: 260px;
-  background: white;
+  background: #fff;
   border-radius: 12px;
   padding: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
-.social-history h3 {
+.history-panel h3 {
   text-align: center;
-  margin-bottom: 8px;
+  margin-top: 0;
 }
 
-.social-history ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+#history {
   font-size: 13px;
+  max-height: 360px;
+  overflow-y: auto;
 }
 
-.social-history li {
-  margin-bottom: 6px;
+.history-item {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
   border-bottom: 1px dashed #eee;
-  padding-bottom: 4px;
 }
 
 /* ===== CONTEÚDO ===== */
-h1, h2 { text-align: center; }
+.content {
+  width: 420px;
+}
+
+h1, h2 {
+  text-align: center;
+}
 
 .card {
-  max-width: 400px;
-  margin: 20px auto;
   background: white;
   padding: 18px;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,.08);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
 .row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 14px;
-  padding-bottom: 6px;
+  margin-bottom: 12px;
   border-bottom: 1px dashed #eee;
 }
 
 button {
   padding: 6px 10px;
-  font-size: 14px;
   cursor: pointer;
 }
 
+/* ===== LÍDER ===== */
+.leader {
+  color: #ff9800;
+  text-shadow: 0 0 6px rgba(255,152,0,0.8);
+  animation: glow 1.2s infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 6px rgba(255,152,0,0.4); }
+  to { text-shadow: 0 0 14px rgba(255,152,0,1); }
+}
+
+/* ===== PROGRESSO ===== */
 .progress-wrapper {
-  max-width: 420px;
-  margin: 30px auto;
+  margin-top: 20px;
   text-align: center;
 }
 
@@ -91,13 +108,8 @@ button {
 }
 
 .meta-text {
-  margin-top: 12px;
+  margin-top: 10px;
   font-weight: bold;
-}
-
-.chart-wrapper {
-  max-width: 320px;
-  margin: 20px auto;
 }
 
 /* ===== ANIMAÇÕES ===== */
@@ -106,26 +118,47 @@ button {
   40% { transform: translateY(-60%) scale(1.05); }
   100% { transform: translateY(-50%) scale(1); }
 }
-.beer-animate { animation: beer-bounce .35s ease; }
+.beer-animate { animation: beer-bounce 0.35s ease; }
 
 @keyframes beer-win {
   0% { transform: translateY(-50%) scale(1); }
   50% { transform: translateY(-50%) scale(1.3); }
   100% { transform: translateY(-50%) scale(1.1); }
 }
-.beer-win { animation: beer-win .6s ease forwards; }
+.beer-win { animation: beer-win 0.6s ease forwards; }
+
+/* ===== GRÁFICO ===== */
+.chart-wrapper {
+  max-width: 320px;
+  margin: 20px auto;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+  }
+  .history-panel, .content {
+    width: 100%;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<!-- HISTÓRICO SOCIAL -->
-<div class="social-history">
-  <h3>📜 Histórico</h3>
-  <ul id="social-log"></ul>
+<h1>🍺 Contador de Cervejas – 2026</h1>
+
+<div class="main-container">
+
+<!-- HISTÓRICO -->
+<div class="history-panel">
+  <h3>🕘 Histórico</h3>
+  <div id="history"></div>
 </div>
 
-<h1>🍺 Contador de Cervejas – 2026</h1>
+<!-- CONTEÚDO -->
+<div class="content">
 
 <div class="card">
   <div class="row"><span id="label-jaime">Jaime</span><span id="jaime">0</span>
@@ -142,10 +175,9 @@ button {
   </div>
 </div>
 
-<h2>Total do grupo: <span id="total">0</span> 🍺</h2>
+<h2>Total: <span id="total">0</span> 🍺</h2>
 
 <div class="progress-wrapper">
-  <div>🏁 31/12/2026</div>
   <div class="progress-track"><div id="runner">🍺</div></div>
   <div id="meta-text" class="meta-text"></div>
 </div>
@@ -154,127 +186,117 @@ button {
   <canvas id="beerChart"></canvas>
 </div>
 
-<!-- Firebase + Chart -->
+</div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyBbhjdbYuR9o4dBZtIuE8tr8H4-CEMA2xM",
+  apiKey: "SUA_API_KEY",
   authDomain: "one-thousand-beer.firebaseapp.com",
   projectId: "one-thousand-beer"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const docRef = db.collection("grupos").doc("cerveja_2026");
 
-/* ===== HISTÓRICO ===== */
-let historico = [];
-let ultimoLider = null;
+let history = [];
+let lastLeader = null;
 let metasBatidas = new Set();
 
-function logEvento(texto) {
-  historico.unshift("🍺 " + texto);
-  if (historico.length > 10) historico.pop();
-  document.getElementById("social-log").innerHTML =
-    historico.map(e => `<li>${e}</li>`).join("");
-}
+const metas = [250,500,750,950,1000];
 
-docRef.onSnapshot(doc => {
+const ctx = document.getElementById("beerChart");
+const beerChart = new Chart(ctx,{
+  type:"pie",
+  data:{labels:["Jaime","Cux","Célula"],datasets:[{data:[1,1,1],
+  backgroundColor:["#81c784","#fff176","#ffb74d"]}]}
+});
+
+docRef.onSnapshot(doc=>{
   const d = doc.data();
-  const total = d.jaime + d.cux + d.celula;
+  const total = d.jaime+d.cux+d.celula;
 
-  ["jaime","cux","celula"].forEach(n => document.getElementById(n).innerText = d[n]);
-  document.getElementById("total").innerText = total.toFixed(1);
+  jaime.innerText=d.jaime;
+  cux.innerText=d.cux;
+  celula.innerText=d.celula;
+  document.getElementById("total").innerText=total.toFixed(1);
 
   atualizarRanking(d);
   atualizarCorrida(total);
   atualizarTextoMeta(total);
-  atualizarHistorico(d, total);
+  atualizarHistorico(d,total);
 
-  beerChart.data.datasets[0].data = [d.jaime, d.cux, d.celula];
+  beerChart.data.datasets[0].data=[d.jaime,d.cux,d.celula];
   beerChart.update();
 });
 
-function atualizarHistorico(d, total) {
-  const arr = [
-    {n:"Jaime",v:d.jaime},
-    {n:"Cux",v:d.cux},
-    {n:"Célula",v:d.celula}
-  ].sort((a,b)=>b.v-a.v);
+function addBeer(n){docRef.update({[n]:firebase.firestore.FieldValue.increment(0.5)})}
+function removeBeer(n){docRef.update({[n]:firebase.firestore.FieldValue.increment(-0.5)})}
 
-  if (arr[0].v !== arr[1].v && arr[0].n !== ultimoLider) {
-    logEvento(`${arr[0].n} virou líder 🥇`);
-    ultimoLider = arr[0].n;
+function atualizarRanking(d){
+  const pessoas=[{n:"jaime",v:d.jaime},{n:"cux",v:d.cux},{n:"celula",v:d.celula}];
+  pessoas.sort((a,b)=>b.v-a.v);
+  document.querySelectorAll(".leader").forEach(e=>e.classList.remove("leader"));
+
+  if(pessoas[0].v===pessoas[1].v&&pessoas[1].v===pessoas[2].v){
+    pessoas.forEach(p=>label(p.n,"🍻"));
+    return;
+  }
+  label(pessoas[0].n,"🥇",true);
+  label(pessoas[1].n,"👽");
+  label(pessoas[2].n,"🐢");
+}
+
+function label(n,e,leader=false){
+  const el=document.getElementById("label-"+n);
+  el.innerText=e+" "+n.charAt(0).toUpperCase()+n.slice(1);
+  if(leader) el.classList.add("leader");
+}
+
+function atualizarCorrida(t){
+  const p=Math.min(t/1000*100,100);
+  runner.style.right=`calc(${100-p}% - 12px)`;
+  runner.classList.remove("beer-animate");
+  void runner.offsetWidth;
+  runner.classList.add("beer-animate");
+}
+
+function atualizarTextoMeta(t){
+  meta-text.innerText=t>=1000?"🎉 META BATIDA!":"⏳ Faltam "+(1000-t).toFixed(1)+" bratcholas";
+}
+
+function atualizarHistorico(d,total){
+  const pessoas=[{n:"Jaime",v:d.jaime},{n:"Cux",v:d.cux},{n:"Célula",v:d.celula}];
+  pessoas.sort((a,b)=>b.v-a.v);
+
+  if(pessoas[0].n!==lastLeader){
+    push(`🥇 ${pessoas[0].n} virou líder`);
+    lastLeader=pessoas[0].n;
   }
 
-  if (arr[0].v === arr[1].v) {
-    logEvento("Empate detectado 🤝");
-  }
-
-  [250,500,750,950,1000].forEach(m => {
-    if (total >= m && !metasBatidas.has(m)) {
-      logEvento(`O time chegou à marca de ${m} 🍻`);
+  metas.forEach(m=>{
+    if(total>=m&&!metasBatidas.has(m)){
+      push(`🚩 O time chegou a ${m} bratcholas`);
       metasBatidas.add(m);
     }
   });
 }
 
-/* ===== RANKING ===== */
-function atualizarRanking(d){
-  const p=[
-    {n:"jaime",v:d.jaime},
-    {n:"cux",v:d.cux},
-    {n:"celula",v:d.celula}
-  ].sort((a,b)=>b.v-a.v);
-
-  const vals=p.map(x=>x.v);
-  const uniq=new Set(vals);
-
-  const set=(x,e)=>document.getElementById("label-"+x.n).innerText=`${e} ${x.n[0].toUpperCase()+x.n.slice(1)}`;
-
-  if(uniq.size===1){p.forEach(x=>set(x,"🍻"));return;}
-  if(uniq.size===2){
-    if(p[0].v===p[1].v){set(p[0],"🤝");set(p[1],"🤝");set(p[2],"🐢");return;}
-  }
-  set(p[0],"🥇");set(p[1],"👽");set(p[2],"🐢");
+function push(t){
+  history.unshift({t,ts:new Date()});
+  history=history.slice(0,10);
+  historyDiv.innerHTML=history.map(h=>`<div class="history-item">${h.t}</div>`).join("");
 }
-
-/* ===== PROGRESSO ===== */
-function atualizarCorrida(total){
-  const perc=Math.min(total/1000*100,100);
-  const r=document.getElementById("runner");
-  r.style.right=`calc(${100-perc}% - 12px)`;
-  r.classList.remove("beer-animate");void r.offsetWidth;r.classList.add("beer-animate");
-}
-
-function atualizarTextoMeta(total){
-  const r=document.getElementById("meta-text");
-  if(total>=1000){
-    r.innerText="🎉 META ATINGIDA! 1000 BRATCHOLAS 🍻🔥";
-    document.getElementById("runner").classList.add("beer-win");
-  } else {
-    r.innerText=`⏳ Faltam ${(1000-total).toFixed(1)} bratcholas`;
-  }
-}
-
-/* ===== BOTÕES ===== */
-function addBeer(n){docRef.update({[n]:firebase.firestore.FieldValue.increment(.5)});}
-function removeBeer(n){docRef.get().then(d=>d.data()[n]>=.5&&docRef.update({[n]:firebase.firestore.FieldValue.increment(-.5)}));}
-
-/* ===== GRÁFICO ===== */
-const beerChart=new Chart(document.getElementById("beerChart"),{
-  type:"pie",
-  data:{
-    labels:["Jaime","Cux","Célula"],
-    datasets:[{data:[1,1,1],backgroundColor:["#81c784","#fff176","#ffb74d"]}]
-  }
-});
 </script>
+
 </body>
 </html>
+
+
 
 
 
