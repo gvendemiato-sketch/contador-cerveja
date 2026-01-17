@@ -13,7 +13,7 @@ body {
 
 /* ===== HISTÓRICO SOCIAL ===== */
 .social-history {
-  position: fixed;
+  position: sticky;
   left: 15px;
   top: 20px;
   width: 260px;
@@ -114,45 +114,106 @@ button {
   100% { transform: translateY(-50%) scale(1.1); }
 }
 .beer-win { animation: beer-win .6s ease forwards; }
+
+/* ===== AJUSTE RESPONSIVO DO HISTÓRICO ===== */
+
+/* ===== LAYOUT BASE (DESKTOP E MOBILE) ===== */
+.layout {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+
+
+/* Mobile */
+@media (max-width: 768px) {
+  .social-history {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 30px;
+  }
+
+  .layout {
+display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+    flex-direction: column;
+  }
+
+}
+
+.main-content {
+  max-width: 420px;
+  width: 100%;
+}
+
+
+
+
 </style>
 </head>
 
 <body>
 
-<!-- HISTÓRICO SOCIAL -->
-<div class="social-history">
-  <h3>📜 Histórico</h3>
-  <ul id="social-log"></ul>
-</div>
-
 <h1>🍺 Contador de Cervejas – 2026</h1>
 
-<div class="card">
-  <div class="row"><span id="label-jaime">Jaime</span><span id="jaime">0</span>
-    <button onclick="removeBeer('jaime')">-0,5</button>
-    <button onclick="addBeer('jaime')">+0,5</button>
+<div class="layout">
+
+  <!-- HISTÓRICO SOCIAL -->
+  <div class="social-history">
+    <h3>📜 Histórico</h3>
+    <ul id="social-log"></ul>
   </div>
-  <div class="row"><span id="label-cux">Cux</span><span id="cux">0</span>
-    <button onclick="removeBeer('cux')">-0,5</button>
-    <button onclick="addBeer('cux')">+0,5</button>
-  </div>
-  <div class="row"><span id="label-celula">Célula</span><span id="celula">0</span>
-    <button onclick="removeBeer('celula')">-0,5</button>
-    <button onclick="addBeer('celula')">+0,5</button>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="main-content">
+
+    <div class="card">
+      <div class="row">
+        <span id="label-jaime">Jaime</span>
+        <span id="jaime">0</span>
+        <button onclick="removeBeer('jaime')">-0,5</button>
+        <button onclick="addBeer('jaime')">+0,5</button>
+      </div>
+
+      <div class="row">
+        <span id="label-cux">Cux</span>
+        <span id="cux">0</span>
+        <button onclick="removeBeer('cux')">-0,5</button>
+        <button onclick="addBeer('cux')">+0,5</button>
+      </div>
+
+      <div class="row">
+        <span id="label-celula">Célula</span>
+        <span id="celula">0</span>
+        <button onclick="removeBeer('celula')">-0,5</button>
+        <button onclick="addBeer('celula')">+0,5</button>
+      </div>
+    </div>
+
+    <h2>Total do grupo: <span id="total">0</span> 🍺</h2>
+
+    <div class="progress-wrapper">
+      <div>🏁 31/12/2026</div>
+      <div class="progress-track">
+        <div id="runner">🍺</div>
+      </div>
+      <div id="meta-text" class="meta-text"></div>
+    </div>
+
+    <div class="chart-wrapper">
+      <canvas id="beerChart"></canvas>
+    </div>
+
   </div>
 </div>
 
-<h2>Total do grupo: <span id="total">0</span> 🍺</h2>
+</body>
 
-<div class="progress-wrapper">
-  <div>🏁 31/12/2026</div>
-  <div class="progress-track"><div id="runner">🍺</div></div>
-  <div id="meta-text" class="meta-text"></div>
-</div>
-
-<div class="chart-wrapper">
-  <canvas id="beerChart"></canvas>
-</div>
 
 <!-- Firebase + Chart -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -273,8 +334,10 @@ const beerChart=new Chart(document.getElementById("beerChart"),{
   }
 });
 </script>
+
 </body>
 </html>
+
 
 
 
