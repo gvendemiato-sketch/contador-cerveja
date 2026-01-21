@@ -77,7 +77,13 @@ button {
 .progress-track {
   position: relative;
   height: 28px;
-  background: linear-gradient(90deg,#ffcdd29,#ffe0b2,#fff9c4,#c8e6c9);
+  background: linear-gradient(
+    90deg,
+    #ffcdd2 0%,   /* vermelho */
+    #ffe0b2 33%,  /* laranja */
+    #fff9c4 66%,  /* amarelo */
+    #c8e6c9 100%  /* verde */
+  );
   border-radius: 20px;
   overflow: hidden;
 }
@@ -447,6 +453,7 @@ const beerChart=new Chart(document.getElementById("beerChart"),{
 
 </body>
 </html>
+
 
 
 
