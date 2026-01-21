@@ -152,6 +152,42 @@ display: flex;
 }
 
 
+/* ===== CONTADOR SEMANAL ===== */
+
+.weekly-card {
+  max-width: 320px;
+  margin: 25px auto 10px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+
+.weekly-card h3 {
+  text-align: center;
+  margin-bottom: 12px;
+  font-size: 15px;
+  color: #444;
+}
+
+.weekly-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 14px;
+  border-bottom: 1px dashed #eee;
+}
+
+.weekly-row:last-child {
+  border-bottom: none;
+}
+
+.weekly-row span:last-child {
+  font-weight: bold;
+  color: #222;
+}
+
 
 
 </style>
@@ -357,6 +393,7 @@ const beerChart=new Chart(document.getElementById("beerChart"),{
 
 </body>
 </html>
+
 
 
 
