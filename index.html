@@ -209,6 +209,26 @@ display: flex;
       <canvas id="beerChart"></canvas>
     </div>
 
+	<!-- ===== CONTADOR SEMANAL ===== -->
+<div class="weekly-card">
+  <h3>📅 Consumo da Semana (Seg → Dom)</h3>
+
+  <div class="weekly-row">
+    <span>Jaime</span>
+    <span id="week-jaime">0.0</span>
+  </div>
+
+  <div class="weekly-row">
+    <span>Cux</span>
+    <span id="week-cux">0.0</span>
+  </div>
+
+  <div class="weekly-row">
+    <span>Célula</span>
+    <span id="week-celula">0.0</span>
+  </div>
+</div>
+
   </div>
 </div>
 
@@ -337,6 +357,7 @@ const beerChart=new Chart(document.getElementById("beerChart"),{
 
 </body>
 </html>
+
 
 
 
