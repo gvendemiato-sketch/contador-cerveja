@@ -287,6 +287,25 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const docRef = db.collection("grupos").doc("cerveja_2026");
 
+async function garantirSemanaAtual() {
+  const snap = await docRef.get();
+  const data = snap.data();
+  const monday = getMonday();
+
+  if (!data.week || data.week.start !== monday) {
+    await docRef.update({
+      week: {
+        start: monday,
+        jaime: 0,
+        cux: 0,
+        celula: 0
+      }
+    });
+  }
+}
+garantirSemanaAtual();
+
+
 /* ===== HISTÓRICO ===== */
 let historico = [];
 let ultimoLider = null;
@@ -298,6 +317,16 @@ function logEvento(texto) {
   document.getElementById("social-log").innerHTML =
     historico.map(e => `<li>${e}</li>`).join("");
 }
+
+function getMonday(date = new Date()) {
+  const d = new Date(date);
+  const day = d.getDay(); // 0=Dom, 1=Seg...
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  d.setDate(diff);
+  d.setHours(0,0,0,0);
+  return d.toISOString().slice(0,10); // YYYY-MM-DD
+}
+
 
 docRef.onSnapshot(doc => {
   const d = doc.data();
@@ -313,6 +342,14 @@ docRef.onSnapshot(doc => {
 
   beerChart.data.datasets[0].data = [d.jaime, d.cux, d.celula];
   beerChart.update();
+
+if (d.week) {
+  document.getElementById("week-jaime").innerText = d.week.jaime.toFixed(1);
+  document.getElementById("week-cux").innerText = d.week.cux.toFixed(1);
+  document.getElementById("week-celula").innerText = d.week.celula.toFixed(1);
+}
+
+
 });
 
 function atualizarHistorico(d, total) {
@@ -378,8 +415,25 @@ function atualizarTextoMeta(total){
 }
 
 /* ===== BOTÕES ===== */
-function addBeer(n){docRef.update({[n]:firebase.firestore.FieldValue.increment(.5)});}
-function removeBeer(n){docRef.get().then(d=>d.data()[n]>=.5&&docRef.update({[n]:firebase.firestore.FieldValue.increment(-.5)}));}
+function addBeer(n) {
+  docRef.update({
+    [n]: firebase.firestore.FieldValue.increment(0.5),
+    [`week.${n}`]: firebase.firestore.FieldValue.increment(0.5)
+  });
+}
+
+function removeBeer(n) {
+  docRef.get().then(doc => {
+    const data = doc.data();
+    if (data[n] >= 0.5 && data.week[n] >= 0.5) {
+      docRef.update({
+        [n]: firebase.firestore.FieldValue.increment(-0.5),
+        [`week.${n}`]: firebase.firestore.FieldValue.increment(-0.5)
+      });
+    }
+  });
+}
+
 
 /* ===== GRÁFICO ===== */
 const beerChart=new Chart(document.getElementById("beerChart"),{
@@ -393,6 +447,7 @@ const beerChart=new Chart(document.getElementById("beerChart"),{
 
 </body>
 </html>
+
 
 
 
