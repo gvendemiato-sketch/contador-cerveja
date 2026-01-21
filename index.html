@@ -74,18 +74,16 @@ button {
   text-align: center;
 }
 
-.progress-track {
-  position: relative;
-  height: 28px;
+.progress-track::after {
+  content: "";
+  position: absolute;
+  inset: 0;
   background: linear-gradient(
-    90deg,
-    #ffcdd2 0%,   /* vermelho */
-    #ffe0b2 33%,  /* laranja */
-    #fff9c4 66%,  /* amarelo */
-    #c8e6c9 100%  /* verde */
+    to bottom,
+    rgba(255,255,255,0.35),
+    rgba(255,255,255,0)
   );
-  border-radius: 20px;
-  overflow: hidden;
+  pointer-events: none;
 }
 
 #runner {
@@ -453,6 +451,7 @@ const beerChart=new Chart(document.getElementById("beerChart"),{
 
 </body>
 </html>
+
 
 
 
